@@ -21,11 +21,16 @@ class DisproportionalityAnalyzer:
 
     def compute_ror(self, a: int, b: int, c: int, d: int) -> DisproportionalityResult:
         """Reporting Odds Ratio: ad/bc"""
-        if b == 0 or c == 0:
-            return DisproportionalityResult("ROR", 0, 0, 0, False, a, 0)
-        ror = (a * d) / (b * c)
+        if a == 0 or b == 0 or c == 0 or d == 0:
+            # Use Haldane-Anscombe correction: add 0.5 to all cells
+            a_c, b_c, c_c, d_c = a + 0.5, b + 0.5, c + 0.5, d + 0.5
+            ror = (a_c * d_c) / (b_c * c_c)
+            if a < self.min_cases:
+                return DisproportionalityResult("ROR", round(ror, 4), 0, 999, False, a, 0)
+        else:
+            ror = (a * d) / (b * c)
         log_ror = math.log(ror)
-        se = math.sqrt(1/a + 1/b + 1/c + 1/d) if a > 0 else 999
+        se = math.sqrt(1/a + 1/b + 1/c + 1/d)
         ci_lower = math.exp(log_ror - 1.96 * se)
         ci_upper = math.exp(log_ror + 1.96 * se)
         significant = ci_lower > 1.0 and a >= self.min_cases
@@ -36,7 +41,14 @@ class DisproportionalityAnalyzer:
         """Proportional Reporting Ratio: a/(a+b) / c/(c+d)"""
         if (a + b) == 0 or (c + d) == 0:
             return DisproportionalityResult("PRR", 0, 0, 0, False, a, 0)
-        prr = (a / (a + b)) / (c / (c + d))
+        if a == 0:
+            # Haldane-Anscombe correction
+            a_c, b_c, c_c, d_c = a + 0.5, b + 0.5, c + 0.5, d + 0.5
+            prr = (a_c / (a_c + b_c)) / (c_c / (c_c + d_c))
+            if a < self.min_cases:
+                return DisproportionalityResult("PRR", round(prr, 4), 0, 999, False, a, 0)
+        else:
+            prr = (a / (a + b)) / (c / (c + d))
         log_prr = math.log(prr)
         se = math.sqrt(1/a - 1/(a+b) + 1/c - 1/(c+d)) if a > 0 and c > 0 else 999
         ci_lower = math.exp(log_prr - 1.96 * se)

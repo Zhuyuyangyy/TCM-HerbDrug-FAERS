@@ -62,7 +62,7 @@ class MechanismGraph:
                         evidence_level=min(len(path) - 2, 3),
                         confidence=round(avg_conf, 3)
                     ))
-        except nx.NetworkXNoPath:
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
             pass
         return sorted(paths, key=lambda p: p.confidence, reverse=True)
 

@@ -41,9 +41,9 @@ class FAERSLoader:
                 b += 1
             elif dname != drug_upper and pt == event_upper:
                 c += 1
-        n = a + b + c + d
+        n = len(self.records)
         d = max(0, n - a - b - c)
-        return {"a": a, "b": b, "c": c, "d": d, "n": a+b+c+d}
+        return {"a": a, "b": b, "c": c, "d": d, "n": n}
 
     def get_drug_event_pairs(self, min_count: int = 1) -> List[Dict]:
         pairs = {}
