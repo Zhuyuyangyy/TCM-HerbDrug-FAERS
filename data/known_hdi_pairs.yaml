@@ -1,0 +1,231 @@
+# Known Herb-Drug Interactions for Validation
+# Sources: Natural Medicines Database, Medscape, FDA Safety Alerts, Published literature
+# These serve as positive controls for signal detection validation.
+
+pairs:
+  # --- Ginkgo biloba ---
+  - herb: "Ginkgo biloba"
+    drug: "warfarin"
+    mechanism: "Antiplatelet additive effect; CYP2C9 competition"
+    severity: "major"
+    evidence_level: "established"
+    references:
+      - "Bent S et al. JAMA. 2005;293(1):42-47"
+      - "Vaes LP, Chyka PA. J Clin Pharmacol. 2000;40(10):1150-1157"
+
+  - herb: "Ginkgo biloba"
+    drug: "aspirin"
+    mechanism: "Additive antiplatelet effect"
+    severity: "moderate"
+    evidence_level: "probable"
+    references:
+      - "Kohler S et al. Pharmacopsychiatry. 2004;37(1):26-30"
+
+  - herb: "Ginkgo biloba"
+    drug: "clopidogrel"
+    mechanism: "Additive antiplatelet effect"
+    severity: "moderate"
+    evidence_level: "probable"
+
+  # --- St. John's wort ---
+  - herb: "St. John's wort"
+    drug: "cyclosporine"
+    mechanism: "CYP3A4 and P-glycoprotein induction reduces cyclosporine levels"
+    severity: "major"
+    evidence_level: "established"
+    references:
+      - "Ruschitzka F et al. Lancet. 2000;355(9203):548-549"
+
+  - herb: "St. John's wort"
+    drug: "warfarin"
+    mechanism: "CYP induction reduces warfarin efficacy"
+    severity: "major"
+    evidence_level: "established"
+    references:
+      - "Jiang X et al. Br J Clin Pharmacol. 2004;58(S1):47-55"
+
+  - herb: "St. John's wort"
+    drug: "digoxin"
+    mechanism: "P-glycoprotein induction reduces digoxin levels"
+    severity: "major"
+    evidence_level: "established"
+    references:
+      - "Johne A et al. Clin Pharmacol Ther. 1999;66(4):338-345"
+
+  - herb: "St. John's wort"
+    drug: "oral contraceptives"
+    mechanism: "CYP3A4 induction reduces contraceptive efficacy"
+    severity: "major"
+    evidence_level: "established"
+
+  - herb: "St. John's wort"
+    drug: "irinotecan"
+    mechanism: "CYP3A4 induction reduces irinotecan levels"
+    severity: "major"
+    evidence_level: "established"
+    references:
+      - "Mathijssen RH et al. J Natl Cancer Inst. 2002;94(16):1247-1249"
+
+  # --- Ginseng ---
+  - herb: "Ginseng"
+    drug: "warfarin"
+    mechanism: "May decrease warfarin effect via CYP interaction"
+    severity: "moderate"
+    evidence_level: "possible"
+    references:
+      - "Yuan CS et al. Ann Intern Med. 2004;141(1):23-27"
+
+  - herb: "Ginseng"
+    drug: "insulin"
+    mechanism: "Hypoglycemic additive effect"
+    severity: "moderate"
+    evidence_level: "probable"
+
+  # --- Danshen ---
+  - herb: "Danshen"
+    drug: "warfarin"
+    mechanism: "Antiplatelet and anticoagulant additive; CYP2C9 inhibition"
+    severity: "major"
+    evidence_level: "established"
+    references:
+      - "Izzo AA, Ernst E. Drugs. 2009;69(13):1777-1798"
+
+  - herb: "Danshen"
+    drug: "digoxin"
+    mechanism: "May increase digoxin levels"
+    severity: "moderate"
+    evidence_level: "probable"
+
+  # --- Licorice ---
+  - herb: "Licorice"
+    drug: "warfarin"
+    mechanism: "Glycyrrhizin may affect coagulation"
+    severity: "moderate"
+    evidence_level: "possible"
+
+  - herb: "Licorice"
+    drug: "digoxin"
+    mechanism: "Hypokalemia potentiates digoxin toxicity"
+    severity: "major"
+    evidence_level: "established"
+    references:
+      - "Harada T et al. Jpn Heart J. 1986;27(6):903-911"
+
+  - herb: "Licorice"
+    drug: "furosemide"
+    mechanism: "Potassium depletion additive effect"
+    severity: "moderate"
+    evidence_level: "probable"
+
+  - herb: "Licorice"
+    drug: "hydrochlorothiazide"
+    mechanism: "Potassium depletion additive effect"
+    severity: "moderate"
+    evidence_level: "probable"
+
+  # --- Garlic ---
+  - herb: "Garlic"
+    drug: "warfarin"
+    mechanism: "Antiplatelet additive effect"
+    severity: "moderate"
+    evidence_level: "probable"
+    references:
+      - "Izzo AA, Ernst E. Drugs. 2009;69(13):1777-1798"
+
+  - herb: "Garlic"
+    drug: "saquinavir"
+    mechanism: "CYP3A4 induction reduces saquinavir levels"
+    severity: "major"
+    evidence_level: "established"
+    references:
+      - "Piscitelli SC et al. Clin Infect Dis. 2002;34(2):234-238"
+
+  # --- Echinacea ---
+  - herb: "Echinacea"
+    drug: "cyclosporine"
+    mechanism: "Immunostimulation may counteract immunosuppression"
+    severity: "moderate"
+    evidence_level: "possible"
+
+  # --- Kava ---
+  - herb: "Kava"
+    drug: "benzodiazepines"
+    mechanism: "Additive sedation; potential hepatotoxicity"
+    severity: "major"
+    evidence_level: "probable"
+
+  - herb: "Kava"
+    drug: "alcohol"
+    mechanism: "Additive sedation and hepatotoxicity risk"
+    severity: "major"
+    evidence_level: "probable"
+
+  # --- Turmeric ---
+  - herb: "Turmeric"
+    drug: "warfarin"
+    mechanism: "Antiplatelet additive effect"
+    severity: "moderate"
+    evidence_level: "possible"
+
+  # --- Hawthorn ---
+  - herb: "Hawthorn"
+    drug: "digoxin"
+    mechanism: "Cardiac glycoside additive effect"
+    severity: "moderate"
+    evidence_level: "possible"
+
+  # --- Valerian ---
+  - herb: "Valerian"
+    drug: "benzodiazepines"
+    mechanism: "Additive sedation via GABAergic mechanism"
+    severity: "moderate"
+    evidence_level: "probable"
+
+  # --- Dong Quai ---
+  - herb: "Dong Quai"
+    drug: "warfarin"
+    mechanism: "Coumarin content may potentiate anticoagulation"
+    severity: "moderate"
+    evidence_level: "possible"
+
+  # --- Black Cohosh ---
+  - herb: "Black Cohosh"
+    drug: "hepatotoxic drugs"
+    mechanism: "Additive hepatotoxicity risk"
+    severity: "moderate"
+    evidence_level: "possible"
+
+  # --- Ma Huang ---
+  - herb: "Ma Huang"
+    drug: "theophylline"
+    mechanism: "Sympathomimetic additive effect"
+    severity: "major"
+    evidence_level: "probable"
+
+  - herb: "Ma Huang"
+    drug: "antihypertensives"
+    mechanism: "Sympathomimetic antagonism of antihypertensive effect"
+    severity: "major"
+    evidence_level: "probable"
+
+# Negative controls (expected NO signal)
+negative_controls:
+  - herb: "Ginkgo biloba"
+    drug: "acetaminophen"
+    rationale: "No known pharmacokinetic or pharmacodynamic interaction"
+
+  - herb: "St. John's wort"
+    drug: "acetaminophen"
+    rationale: "No significant interaction reported"
+
+  - herb: "Ginseng"
+    drug: "amoxicillin"
+    rationale: "No known interaction with beta-lactam antibiotics"
+
+  - herb: "Licorice"
+    drug: "amoxicillin"
+    rationale: "No known interaction with beta-lactam antibiotics"
+
+  - herb: "Garlic"
+    drug: "acetaminophen"
+    rationale: "No significant interaction reported"
