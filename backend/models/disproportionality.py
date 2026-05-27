@@ -1,4 +1,4 @@
-"""ROR, PRR, IC disproportionality analysis with confidence intervals."""
+"""ROR, PRR, IC, BCPNN disproportionality analysis with confidence intervals."""
 import math
 from dataclasses import dataclass
 from typing import Optional
@@ -14,7 +14,7 @@ class DisproportionalityResult:
     expected: float
 
 class DisproportionalityAnalyzer:
-    """不成比例分析引擎 — ROR/PRR/IC"""
+    """不成比例分析引擎 — ROR/PRR/IC/BCPNN"""
 
     def __init__(self, min_cases: int = 3):
         self.min_cases = min_cases
@@ -73,9 +73,64 @@ class DisproportionalityAnalyzer:
         return DisproportionalityResult("IC", round(ic, 4), round(ci_lower, 4),
                                         round(ci_upper, 4), significant, a, round(n_exp, 4))
 
+    def compute_bcpnn(self, a: int, b: int, c: int, d: int) -> DisproportionalityResult:
+        """Bayesian Confidence Propagation Neural Network (BCPNN).
+
+        Uses the IC (Information Component) posterior with Bayesian smoothing.
+        The prior is Dirichlet with hyperparameters (0.5, 0.5, 0.5, 0.5)
+        following the WHO-UMC method.
+
+        Posterior expectation:
+            E[IC] = log2((a + 0.5) * (a+b+c+d)) / ((a+b+0.5) * (a+c+0.5))
+
+        Posterior variance (approximate):
+            Var[IC] = 1/(ln2)^2 * ( 1/(a+0.5) - 1/(a+b+c+d+1) + 1/(a+b+0.5) - 1/(a+b+c+d+1)
+                       + 1/(a+c+0.5) - 1/(a+b+c+d+1) )
+
+        95% CI: E[IC] ± 1.96 * sqrt(Var[IC])
+
+        Significant if lower CI bound > 0 (i.e., association not explained by chance).
+        """
+        n = a + b + c + d
+        if n == 0 or a == 0:
+            return DisproportionalityResult("BCPNN", 0.0, 0.0, 0.0, False, a, 0.0)
+
+        # Prior pseudo-count (Dirichlet alpha = 0.5)
+        alpha = 0.5
+        # Posterior expected IC
+        numerator = (a + alpha) * n
+        denominator = (a + b + alpha) * (a + c + alpha)
+        if denominator <= 0:
+            return DisproportionalityResult("BCPNN", 0.0, 0.0, 0.0, False, a, 0.0)
+
+        e_ic = math.log2(numerator / denominator)
+
+        # Posterior variance of IC (approximate)
+        ln2_sq = (math.log(2)) ** 2
+        n_plus1 = n + 1
+        var_ic = (1.0 / ln2_sq) * (
+            1.0 / (a + alpha) - 1.0 / n_plus1
+            + 1.0 / (a + b + alpha) - 1.0 / n_plus1
+            + 1.0 / (a + c + alpha) - 1.0 / n_plus1
+        )
+        # Clamp variance to avoid negative values from numerical issues
+        var_ic = max(var_ic, 0.0)
+        se = math.sqrt(var_ic)
+
+        ci_lower = e_ic - 1.96 * se
+        ci_upper = e_ic + 1.96 * se
+
+        # Expected count under independence
+        n_exp = ((a + b) * (a + c)) / n if n > 0 else 0
+        significant = ci_lower > 0.0 and a >= self.min_cases
+
+        return DisproportionalityResult("BCPNN", round(e_ic, 4), round(ci_lower, 4),
+                                        round(ci_upper, 4), significant, a, round(n_exp, 4))
+
     def analyze_2x2(self, a: int, b: int, c: int, d: int) -> list:
-        """Run all three metrics on a 2x2 table."""
+        """Run all four metrics on a 2x2 table."""
         n = a + b + c + d
         return [self.compute_ror(a, b, c, d),
                 self.compute_prr(a, b, c, d),
-                self.compute_ic(a, b, c, d, n)]
+                self.compute_ic(a, b, c, d, n),
+                self.compute_bcpnn(a, b, c, d)]
