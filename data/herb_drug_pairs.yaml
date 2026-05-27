@@ -1,21 +1,34 @@
-# 已知中西药相互作用药对
+# Known Herb-Drug Interaction Pairs (25+)
+# Sources: Natural Medicines, FDA, EMA, published literature, FAERS reports
+# Categorized by severity: major, moderate, minor
+
 herb_drug_pairs:
+  # ── 丹参 (Danshen) ────────────────────────────────────────────────────
   - herb: "丹参"
     drug: "warfarin"
-    mechanism: "CYP2C9 inhibition"
+    mechanism: "CYP2C9 inhibition + antiplatelet effect"
     severity: "major"
     source: "FDA/EMA"
     cyp_enzyme: "CYP2C9"
-    effect: "Increased bleeding risk"
+    effect: "Increased bleeding risk, elevated INR"
 
   - herb: "丹参"
     drug: "clopidogrel"
-    mechanism: "CYP2C19 inhibition"
+    mechanism: "CYP2C19 inhibition + antiplatelet additive"
     severity: "moderate"
     source: "literature"
     cyp_enzyme: "CYP2C19"
-    effect: "Reduced antiplatelet effect"
+    effect: "Reduced antiplatelet conversion / increased bleeding"
 
+  - herb: "丹参"
+    drug: "digoxin"
+    mechanism: "May increase digoxin plasma levels"
+    severity: "moderate"
+    source: "case_report"
+    cyp_enzyme: ""
+    effect: "Potential digoxin toxicity"
+
+  # ── 甘草 (Licorice) ───────────────────────────────────────────────────
   - herb: "甘草"
     drug: "digoxin"
     mechanism: "11beta-HSD2 inhibition causing hypokalemia"
@@ -32,22 +45,57 @@ herb_drug_pairs:
     cyp_enzyme: ""
     effect: "Severe hypokalemia"
 
+  - herb: "甘草"
+    drug: "warfarin"
+    mechanism: "Glycyrrhizin may affect coagulation cascade"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Altered anticoagulation"
+
+  - herb: "甘草"
+    drug: "furosemide"
+    mechanism: "Potassium depletion additive effect"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Severe hypokalemia, arrhythmia risk"
+
+  # ── 当归 (Dong Quai) ──────────────────────────────────────────────────
   - herb: "当归"
     drug: "warfarin"
     mechanism: "CYP2C19 + coumarin components"
     severity: "moderate"
     source: "case_report"
     cyp_enzyme: "CYP2C19"
-    effect: "Increased INR"
+    effect: "Increased INR, bleeding risk"
 
+  - herb: "当归"
+    drug: "clopidogrel"
+    mechanism: "CYP2C19 competition + antiplatelet effect"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: "CYP2C19"
+    effect: "Altered antiplatelet activity"
+
+  # ── 黄芩 (Scutellaria) ────────────────────────────────────────────────
   - herb: "黄芩"
     drug: "cyclosporine"
+    mechanism: "CYP3A4 inhibition by baicalin/wogonin"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: "CYP3A4"
+    effect: "Increased cyclosporine levels, nephrotoxicity"
+
+  - herb: "黄芩"
+    drug: "tacrolimus"
     mechanism: "CYP3A4 inhibition by baicalin"
     severity: "major"
     source: "literature"
     cyp_enzyme: "CYP3A4"
-    effect: "Increased cyclosporine levels"
+    effect: "Increased tacrolimus exposure"
 
+  # ── 大黄 (Rhubarb) ────────────────────────────────────────────────────
   - herb: "大黄"
     drug: "digoxin"
     mechanism: "GI motility increase reducing absorption"
@@ -56,27 +104,232 @@ herb_drug_pairs:
     cyp_enzyme: ""
     effect: "Reduced digoxin bioavailability"
 
+  - herb: "大黄"
+    drug: "warfarin"
+    mechanism: "CYP3A4/CYP2C9 inhibition"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: "CYP3A4"
+    effect: "Altered warfarin metabolism"
+
+  # ── 圣约翰草 (St. John's Wort) ────────────────────────────────────────
   - herb: "圣约翰草"
     drug: "cyclosporine"
     mechanism: "CYP3A4 + P-gp induction"
     severity: "major"
     source: "FDA"
     cyp_enzyme: "CYP3A4"
-    effect: "Subtherapeutic cyclosporine"
+    effect: "Subtherapeutic cyclosporine, transplant rejection"
 
+  - herb: "圣约翰草"
+    drug: "warfarin"
+    mechanism: "CYP3A4/CYP2C9 induction reduces warfarin"
+    severity: "major"
+    source: "FDA"
+    cyp_enzyme: "CYP3A4"
+    effect: "Reduced anticoagulation, thromboembolism risk"
+
+  - herb: "圣约翰草"
+    drug: "digoxin"
+    mechanism: "P-glycoprotein induction reduces digoxin"
+    severity: "major"
+    source: "FDA"
+    cyp_enzyme: ""
+    effect: "Subtherapeutic digoxin levels"
+
+  - herb: "圣约翰草"
+    drug: "oral contraceptives"
+    mechanism: "CYP3A4 induction reduces contraceptive levels"
+    severity: "major"
+    source: "FDA"
+    cyp_enzyme: "CYP3A4"
+    effect: "Contraceptive failure"
+
+  - herb: "圣约翰草"
+    drug: "irinotecan"
+    mechanism: "CYP3A4 induction reduces irinotecan exposure"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: "CYP3A4"
+    effect: "Reduced chemotherapy efficacy"
+
+  - herb: "圣约翰草"
+    drug: "simvastatin"
+    mechanism: "CYP3A4 induction reduces statin levels"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: "CYP3A4"
+    effect: "Reduced lipid-lowering effect"
+
+  # ── 红曲 (Red Yeast Rice) ─────────────────────────────────────────────
+  - herb: "红曲"
+    drug: "simvastatin"
+    mechanism: "Monacolin K (lovastatin) additive + CYP3A4 competition"
+    severity: "major"
+    source: "FDA"
+    cyp_enzyme: "CYP3A4"
+    effect: "Rhabdomyolysis risk"
+
+  - herb: "红曲"
+    drug: "atorvastatin"
+    mechanism: "Additive HMG-CoA reductase inhibition"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: "CYP3A4"
+    effect: "Myopathy, rhabdomyolysis"
+
+  - herb: "红曲"
+    drug: "cyclosporine"
+    mechanism: "CYP3A4 competition + statin-like toxicity"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: "CYP3A4"
+    effect: "Severe myopathy risk"
+
+  # ── 银杏 (Ginkgo) ─────────────────────────────────────────────────────
+  - herb: "银杏"
+    drug: "warfarin"
+    mechanism: "Antiplatelet (PAF antagonism) + CYP2C9 competition"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: "CYP2C9"
+    effect: "Increased bleeding risk"
+
+  - herb: "银杏"
+    drug: "aspirin"
+    mechanism: "Additive antiplatelet effect"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Bleeding risk"
+
+  - herb: "银杏"
+    drug: "clopidogrel"
+    mechanism: "Additive antiplatelet (PAF + ADP pathways)"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Increased bleeding"
+
+  # ── 人参 (Ginseng) ────────────────────────────────────────────────────
+  - herb: "人参"
+    drug: "warfarin"
+    mechanism: "Ginsenosides may reduce warfarin effect"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: "CYP2C9"
+    effect: "Reduced anticoagulation"
+
+  - herb: "人参"
+    drug: "insulin"
+    mechanism: "Hypoglycemic additive effect"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Hypoglycemia risk"
+
+  - herb: "人参"
+    drug: "metformin"
+    mechanism: "Hypoglycemic synergy"
+    severity: "minor"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Enhanced glucose lowering"
+
+  # ── 麻黄 (Ephedra) ────────────────────────────────────────────────────
+  - herb: "麻黄"
+    drug: "theophylline"
+    mechanism: "Sympathomimetic + CYP1A2 competition"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: "CYP1A2"
+    effect: "Tachycardia, hypertension, theophylline toxicity"
+
+  - herb: "麻黄"
+    drug: "antihypertensives"
+    mechanism: "Sympathomimetic antagonism"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Uncontrolled hypertension"
+
+  - herb: "麻黄"
+    drug: "MAO_inhibitors"
+    mechanism: "Tyramine-like sympathomimetic crisis"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Hypertensive crisis"
+
+  # ── 半夏 (Pinellia) ───────────────────────────────────────────────────
+  - herb: "半夏"
+    drug: "metoprolol"
+    mechanism: "CYP2D6 competition"
+    severity: "moderate"
+    source: "theoretical"
+    cyp_enzyme: "CYP2D6"
+    effect: "Increased metoprolol levels, bradycardia"
+
+  # ── 附子 (Aconite) ────────────────────────────────────────────────────
+  - herb: "附子"
+    drug: "antiarrhythmics"
+    mechanism: "Sodium channel activation vs blockade"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Proarrhythmic risk, cardiac arrest"
+
+  - herb: "附子"
+    drug: "digoxin"
+    mechanism: "Additive cardiac toxicity via different mechanisms"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Fatal arrhythmia risk"
+
+  # ── 姜黄 (Turmeric) ──────────────────────────────────────────────────
+  - herb: "姜黄"
+    drug: "warfarin"
+    mechanism: "Antiplatelet additive + CYP2C9 inhibition"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: "CYP2C9"
+    effect: "Increased bleeding risk"
+
+  # ── 大蒜 (Garlic) ─────────────────────────────────────────────────────
+  - herb: "大蒜"
+    drug: "saquinavir"
+    mechanism: "CYP3A4 induction reduces saquinavir levels"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: "CYP3A4"
+    effect: "Subtherapeutic HIV protease inhibitor"
+
+  - herb: "大蒜"
+    drug: "warfarin"
+    mechanism: "Antiplatelet additive effect"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Increased bleeding risk"
+
+# CYP substrate reference
 cyp_enzymes:
+  CYP1A2:
+    substrates: ["theophylline", "caffeine", "clozapine", "tizanidine"]
+    clinical_significance: "moderate"
   CYP2C9:
-    substrates: ["warfarin", "phenytoin", "tolbutamide", "losartan"]
+    substrates: ["warfarin", "phenytoin", "tolbutamide", "losartan", "fluvastatin"]
     clinical_significance: "high"
   CYP2C19:
-    substrates: ["clopidogrel", "omeprazole", "diazepam"]
+    substrates: ["clopidogrel", "omeprazole", "diazepam", "voriconazole"]
+    clinical_significance: "high"
+  CYP2D6:
+    substrates: ["metoprolol", "codeine", "tramadol", "fluoxetine", "dextromethorphan"]
     clinical_significance: "high"
   CYP3A4:
-    substrates: ["cyclosporine", "tacrolimus", "simvastatin", "midazolam"]
+    substrates: ["cyclosporine", "tacrolimus", "simvastatin", "midazolam", "atorvastatin", "irinotecan"]
     clinical_significance: "very_high"
-  CYP2D6:
-    substrates: ["metoprolol", "codeine", "tramadol", "fluoxetine"]
+  P_gp:
+    substrates: ["digoxin", "cyclosporine", "tacrolimus", "saquinavir", "diltiazem"]
     clinical_significance: "high"
-  CYP1A2:
-    substrates: ["theophylline", "caffeine", "clozapine"]
-    clinical_significance: "moderate"
