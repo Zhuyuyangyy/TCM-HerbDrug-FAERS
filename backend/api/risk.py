@@ -2,8 +2,10 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Optional
+from ..analysis.risk_scoring import RiskScorer
 
 router = APIRouter(prefix="/api/risk", tags=["risk"])
+_scorer = RiskScorer()
 
 class RiskRequest(BaseModel):
     drug: str
@@ -16,10 +18,8 @@ class RiskRequest(BaseModel):
 
 @router.post("/assess")
 async def assess_risk(req: RiskRequest):
-    from ..analysis.risk_scoring import RiskScorer
-    scorer = RiskScorer()
     has_signal = req.signal_strength != "none"
-    result = scorer.assess_risk(
+    result = _scorer.assess_risk(
         drug=req.drug, herb=req.herb,
         has_signal=has_signal, signal_strength=req.signal_strength,
         has_db_support=req.has_db_support, has_mechanism=req.has_mechanism,
