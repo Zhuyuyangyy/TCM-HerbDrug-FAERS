@@ -1,0 +1,82 @@
+# 已知中西药相互作用药对
+herb_drug_pairs:
+  - herb: "丹参"
+    drug: "warfarin"
+    mechanism: "CYP2C9 inhibition"
+    severity: "major"
+    source: "FDA/EMA"
+    cyp_enzyme: "CYP2C9"
+    effect: "Increased bleeding risk"
+
+  - herb: "丹参"
+    drug: "clopidogrel"
+    mechanism: "CYP2C19 inhibition"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: "CYP2C19"
+    effect: "Reduced antiplatelet effect"
+
+  - herb: "甘草"
+    drug: "digoxin"
+    mechanism: "11beta-HSD2 inhibition causing hypokalemia"
+    severity: "major"
+    source: "EMA"
+    cyp_enzyme: ""
+    effect: "Potentiated cardiac toxicity"
+
+  - herb: "甘草"
+    drug: "hydrochlorothiazide"
+    mechanism: "Potassium depletion synergy"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Severe hypokalemia"
+
+  - herb: "当归"
+    drug: "warfarin"
+    mechanism: "CYP2C19 + coumarin components"
+    severity: "moderate"
+    source: "case_report"
+    cyp_enzyme: "CYP2C19"
+    effect: "Increased INR"
+
+  - herb: "黄芩"
+    drug: "cyclosporine"
+    mechanism: "CYP3A4 inhibition by baicalin"
+    severity: "major"
+    source: "literature"
+    cyp_enzyme: "CYP3A4"
+    effect: "Increased cyclosporine levels"
+
+  - herb: "大黄"
+    drug: "digoxin"
+    mechanism: "GI motility increase reducing absorption"
+    severity: "moderate"
+    source: "literature"
+    cyp_enzyme: ""
+    effect: "Reduced digoxin bioavailability"
+
+  - herb: "圣约翰草"
+    drug: "cyclosporine"
+    mechanism: "CYP3A4 + P-gp induction"
+    severity: "major"
+    source: "FDA"
+    cyp_enzyme: "CYP3A4"
+    effect: "Subtherapeutic cyclosporine"
+
+cyp_enzymes:
+  CYP2C9:
+    substrates: ["warfarin", "phenytoin", "tolbutamide", "losartan"]
+    clinical_significance: "high"
+  CYP2C19:
+    substrates: ["clopidogrel", "omeprazole", "diazepam"]
+    clinical_significance: "high"
+  CYP3A4:
+    substrates: ["cyclosporine", "tacrolimus", "simvastatin", "midazolam"]
+    clinical_significance: "very_high"
+  CYP2D6:
+    substrates: ["metoprolol", "codeine", "tramadol", "fluoxetine"]
+    clinical_significance: "high"
+  CYP1A2:
+    substrates: ["theophylline", "caffeine", "clozapine"]
+    clinical_significance: "moderate"
