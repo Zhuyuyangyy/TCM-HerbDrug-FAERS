@@ -2,9 +2,9 @@
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from data.faers_loader import FAERSLoader
-from data.herb_kg import HerbKnowledgeGraph
-from data.cyp_mapper import CYPMapper
+from backend.data.faers_loader import FAERSLoader
+from backend.data.herb_kg import HerbKnowledgeGraph
+from backend.data.cyp_mapper import CYPMapper
 from models.signal_detector import SignalDetector
 from analysis.risk_scoring import RiskScorer
 from analysis.evidence_chain import EvidenceChainBuilder

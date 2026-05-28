@@ -1,0 +1,6 @@
+PyYAML
+fastapi
+networkx
+pandas
+pydantic
+uvicorn

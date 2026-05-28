@@ -1,17 +1,25 @@
 """Tests for API endpoints."""
 import pytest
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
 from fastapi.testclient import TestClient
-from main import app
+
+from backend.main import app
 
 client = TestClient(app)
+
 
 def test_health():
     r = client.get("/health")
     assert r.status_code == 200
     assert r.json()["status"] == "ok"
+
+
+def test_api_summary():
+    r = client.get("/api/summary")
+    assert r.status_code == 200
+    data = r.json()
+    assert "platform" in data
+    assert "herbs" in data
+
 
 def test_detect_signal():
     r = client.post("/api/signal/detect",
@@ -22,9 +30,10 @@ def test_detect_signal():
     assert "is_signal" in data
     assert "metrics" in data
 
+
 def test_risk_assess():
     r = client.post("/api/risk/assess",
-                    json={"drug": "warfarin", "herb": "丹参",
+                    json={"drug": "warfarin", "herb": "ginkgo",
                           "signal_strength": "strong",
                           "has_db_support": True, "has_mechanism": True,
                           "mechanism_confidence": 0.9, "cyp_potency": 0.9})
@@ -33,8 +42,9 @@ def test_risk_assess():
     assert data["risk_level"] >= 1
     assert data["score"] > 0
 
+
 def test_evidence_chain():
-    r = client.get("/api/risk/chain?drug=warfarin&herb=丹参")
+    r = client.get("/api/risk/chain?drug=warfarin&herb=ginkgo")
     assert r.status_code == 200
     data = r.json()
     assert "chain_type" in data
