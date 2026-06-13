@@ -1,4 +1,4 @@
-"""Herb knowledge graph interface — 15 herbs with full CYP inhibition profiles."""
+"""Herb knowledge graph interface — 16 herbs with full CYP inhibition profiles."""
 import yaml
 from typing import List, Dict, Optional
 from pathlib import Path
@@ -6,7 +6,7 @@ from pathlib import Path
 class HerbKnowledgeGraph:
     """中药知识图谱接口 — HERB 2.0 / BATMAN-TCM 2.0 风格
 
-    Contains 15 default herbs with complete CYP inhibition profiles
+    Contains 16 default herbs with complete CYP inhibition profiles
     covering CYP1A2, CYP2C9, CYP2C19, CYP2D6, CYP3A4, CYP2B6, and P-gp.
     """
 
@@ -150,6 +150,15 @@ class HerbKnowledgeGraph:
                 "english": "Hawthorn",
                 "ingredients": ["vitexin", "hyperoside", "chlorogenic_acid"],
                 "cyp_inhibition": {"CYP3A4": 0.35, "CYP2D6": 0.3},
+                "cyp_induction": {},
+                "pgp_effect": "none",
+                "evidence_level": "possible",
+            },
+            "锯棕榈": {
+                "latin": "Serenoa repens", "pinyin": "Juzonglv",
+                "english": "Saw Palmetto",
+                "ingredients": ["beta_sitosterol", "laurostearic_acid", "oleic_acid"],
+                "cyp_inhibition": {"CYP3A4": 0.3, "CYP2D6": 0.25},
                 "cyp_induction": {},
                 "pgp_effect": "none",
                 "evidence_level": "possible",

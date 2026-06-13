@@ -11,7 +11,7 @@
 本研究构建"信号发现-机制解释-风险排序"三位一体框架：(1) 基于FDA FAERS数据库的不成比例分析(ROR/PRR/IC)进行信号检测；(2) 构建中药-成分-靶点-CYP/转运体-不良事件机制图谱；(3) 设计三级风险排序体系。
 
 ### Results (placeholder)
-在合成FAERS数据上，预期检出率>80%，与已知HDI数据库的一致性>70%。
+Results pending real FAERS data analysis. Current validation is limited to synthetic data with injected signals; no real-world detection rate or database consistency figures can be claimed at this stage.
 
 ### Conclusion
 本框架为中西药安全联用提供了可扩展、可解释的风险评估工具。

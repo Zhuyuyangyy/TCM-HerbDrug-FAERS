@@ -13,16 +13,16 @@
 
 Herb-drug interactions (HDIs) pose a significant safety concern as herbal medicine use increases globally. This platform provides a systematic, evidence-based approach to detecting HDI signals from real-world adverse event data, combining statistical disproportionality analysis with mechanistic knowledge graphs for risk assessment.
 
-The system processes FDA FAERS quarterly data (2004-present), applies five-class disproportionality analysis methods, and cross-references findings against a curated herb-CYP-transporter knowledge graph covering 15 herbs with full pharmacokinetic profiles.
+The system processes FDA FAERS quarterly data (2004-present), applies five-class disproportionality analysis methods, and cross-references findings against a curated herb-CYP-transporter knowledge graph covering 16 herbs with full pharmacokinetic profiles.
 
 ---
 
 ## Key Features
 
-- **Real FAERS Data Validation** -- Processes FDA public quarterly data (2004-present), not synthetic data
+- **FAERS Data Pipeline** -- Designed to process FDA public quarterly data (2004-present); current validation uses synthetic data with injected signals
 - **Five-Metric Signal Detection** -- ROR / PRR / IC / BCPNN / MGPS disproportionality analysis with confidence intervals
 - **EBGM Shrinkage Scoring** -- Bayesian Gamma-Poisson model (MGPS) for robust signal strength grading
-- **15-Herb Knowledge Graph** -- Curated herb-ingredient-CYP/transporter-AE directed graph with confidence scores
+- **16-Herb Knowledge Graph** -- Curated herb-ingredient-CYP/transporter-AE directed graph with confidence scores
 - **Herb Name Normalization** -- English/Latin/Pinyin multi-name matching for FAERS drug name resolution
 - **Positive Control Validation** -- 28 literature-known interaction pairs as gold standard
 - **Three-Level Risk Ranking** -- signal_only / signal_plus_database / signal_plus_mechanism
@@ -36,7 +36,7 @@ The system processes FDA FAERS quarterly data (2004-present), applies five-class
 ```
         +-------------------+     +-------------------+
         | FDA FAERS Data    |     | Herb Knowledge    |
-        | (Quarterly ASCII) |     | Graph (15 herbs)  |
+        | (Quarterly ASCII) |     | Graph (16 herbs)  |
         +---------+---------+     +---------+---------+
                   |                         |
         +---------v---------+     +---------v---------+
@@ -69,7 +69,7 @@ The system processes FDA FAERS quarterly data (2004-present), applies five-class
 |-------|-----------|
 | Language | Python 3.10+ |
 | API Framework | FastAPI + Uvicorn |
-| Statistical Computing | SciPy, NumPy |
+| Statistical Computing | NumPy |
 | Data Processing | Pandas |
 | Graph Analysis | NetworkX |
 | Configuration | PyYAML, Pydantic |
@@ -93,7 +93,7 @@ cd TCM-HerbDrug-FAERS
 pip install -e .
 
 # Or install dependencies directly
-pip install fastapi uvicorn networkx scipy numpy pandas pyyaml pydantic pydantic-settings httpx pytest
+pip install fastapi uvicorn networkx numpy pandas pyyaml pydantic pydantic-settings httpx pytest
 ```
 
 ### 2. Download FAERS Data
@@ -200,7 +200,7 @@ print(response.json())
 
 ---
 
-## Supported Herbs (15)
+## Supported Herbs (16)
 
 | Herb | Latin Name | Chinese | Key CYP Interactions |
 |------|------------|---------|---------------------|
@@ -219,6 +219,7 @@ print(response.json())
 | Pinellia | Pinellia ternata | 半夏 | CYP2D6, CYP3A4 |
 | Aconite | Aconitum carmichaelii | 附子 | CYP3A4 |
 | Hawthorn | Crataegus pinnatifida | 山楂 | CYP3A4, CYP2D6 |
+| Saw Palmetto | Serenoa repens | 锯棕榈 | CYP3A4, CYP2D6 |
 
 ---
 
@@ -236,7 +237,7 @@ TCM-HerbDrug-FAERS/
 │   │   ├── faers_real_loader.py   # Real FAERS data loader
 │   │   ├── herb_name_normalizer.py # Herb name normalization
 │   │   ├── faers_loader.py        # Generic data loader
-│   │   ├── herb_kg.py             # Herb knowledge graph (15 herbs, CYP profiles)
+│   │   ├── herb_kg.py             # Herb knowledge graph (16 herbs, CYP profiles)
 │   │   ├── cyp_mapper.py          # CYP enzyme mapping
 │   │   └── __init__.py
 │   ├── analysis/
@@ -315,7 +316,9 @@ Bayesian shrinkage estimation based on the Gamma-Poisson model:
 
 ## Benchmarks
 
-Run the built-in validation to reproduce benchmarks:
+**Important**: The current validation uses synthetic data with injected signals, not real FAERS data. All benchmark results (sensitivity, specificity) reflect performance on synthetic data only and should not be interpreted as real-world clinical performance. Results on real FAERS data have not yet been computed.
+
+Run the built-in validation to reproduce synthetic-data benchmarks:
 
 ```bash
 # Smoke test with synthetic data
@@ -327,9 +330,9 @@ python scripts/run_synthetic_validation.py
 
 | Validation | Details |
 |-----------|---------|
-| Positive controls | 28 literature-known HDI pairs (e.g., Ginkgo + Warfarin, St. John's wort + Cyclosporine) |
-| Negative controls | 5 pairs with no known interaction for specificity assessment |
-| Mechanism graph | 20+ documented HDI mechanism edges across 15 herbs |
+| Positive controls | 28 literature-known HDI pairs (e.g., Ginkgo + Warfarin, St. John's wort + Cyclosporine) -- validation against synthetic data only |
+| Negative controls | 5 pairs with no known interaction for specificity assessment -- synthetic data only |
+| Mechanism graph | 20+ documented HDI mechanism edges across 16 herbs |
 
 ---
 

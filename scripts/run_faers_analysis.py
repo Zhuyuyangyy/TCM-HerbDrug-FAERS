@@ -160,7 +160,7 @@ def main():
     logger.info("Herbs with signals: %d", stats["herbs_with_signals"])
     if result.validation:
         v = result.validation
-        logger.info("Validation sensitivity: %.1%% (%d/%d)",
+        logger.info("Validation sensitivity: %.1f%% (%d/%d)",
                      v.sensitivity * 100, v.detected, v.total_controls)
     logger.info("Results saved to: %s", output_dir)
 

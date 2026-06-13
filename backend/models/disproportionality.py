@@ -1,7 +1,7 @@
 """ROR, PRR, IC, BCPNN disproportionality analysis with confidence intervals."""
 import math
 from dataclasses import dataclass
-from typing import Optional
+from typing import List, Optional
 
 @dataclass
 class DisproportionalityResult:
@@ -134,3 +134,66 @@ class DisproportionalityAnalyzer:
                 self.compute_prr(a, b, c, d),
                 self.compute_ic(a, b, c, d, n),
                 self.compute_bcpnn(a, b, c, d)]
+
+    @staticmethod
+    def p_value_from_ror(ror_value: float, ci_lower: float, ci_upper: float) -> float:
+        """Derive a two-sided p-value from ROR and its 95% CI.
+
+        Uses the normal approximation on the log scale:
+            z = log(ROR) / SE(log(ROR))
+        where SE = log(ci_upper / ci_lower) / (2 * 1.96).
+
+        Returns 1.0 if computation is not possible (e.g. zero values).
+        """
+        if ror_value <= 0 or ci_lower <= 0 or ci_upper <= 0:
+            return 1.0
+        log_ror = math.log(ror_value)
+        se = (math.log(ci_upper) - math.log(ci_lower)) / (2.0 * 1.96)
+        if se <= 0:
+            return 1.0
+        z = abs(log_ror / se)
+        # Approximate two-sided p-value using survival function of standard normal
+        # p = 2 * (1 - Phi(|z|))  where Phi is the standard normal CDF
+        # Rational approximation (Abramowitz & Stegun 26.2.17)
+        t = 1.0 / (1.0 + 0.2316419 * z)
+        d = 0.3989422804014327  # 1/sqrt(2*pi)
+        p_one_tail = d * math.exp(-z * z / 2.0) * (
+            t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 +
+            t * (-1.821255978 + t * 1.330274429))))
+        )
+        return min(1.0, 2.0 * p_one_tail)
+
+    @staticmethod
+    def apply_fdr_correction(p_values: List[float], alpha: float = 0.05) -> List[bool]:
+        """Apply Benjamini-Hochberg FDR correction to a list of p-values.
+
+        Parameters
+        ----------
+        p_values : list of float
+            Raw p-values from multiple hypothesis tests.
+        alpha : float
+            Desired false discovery rate (default 0.05).
+
+        Returns
+        -------
+        list of bool
+            Whether each test survives the FDR correction.
+        """
+        n = len(p_values)
+        if n == 0:
+            return []
+        # Sort p-values and track original indices
+        indexed = sorted(enumerate(p_values), key=lambda x: x[1])
+        results = [False] * n
+        # Find the largest k such that p_(k) <= k/n * alpha
+        max_k = -1
+        for rank, (orig_idx, p) in enumerate(indexed, start=1):
+            threshold = (rank / n) * alpha
+            if p <= threshold:
+                max_k = rank
+        # Reject all hypotheses with rank <= max_k
+        if max_k >= 1:
+            for rank, (orig_idx, p) in enumerate(indexed, start=1):
+                if rank <= max_k:
+                    results[orig_idx] = True
+        return results

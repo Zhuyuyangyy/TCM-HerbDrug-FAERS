@@ -237,6 +237,35 @@ class FAERSAnalysisPipeline:
             ), reverse=True)
             herb_results[herb_name] = results
 
+        # 3b. Multiple testing correction (Benjamini-Hochberg FDR)
+        # With 16 herbs x 20 events = 320+ comparisons, correction is essential
+        n_comparisons = sum(len(r) for r in herb_results.values())
+        if n_comparisons > 1:
+            p_values = []
+            all_results_flat = []
+            for herb_name, results in herb_results.items():
+                for r in results:
+                    p = DisproportionalityAnalyzer.p_value_from_ror(
+                        r.ror_value, r.ror_ci_lower, r.ror_ci_upper
+                    )
+                    p_values.append(p)
+                    all_results_flat.append(r)
+
+            fdr_significant = DisproportionalityAnalyzer.apply_fdr_correction(
+                p_values, alpha=0.05
+            )
+
+            # Update is_signal flags: only keep signals that survive FDR
+            for r, is_fdr_sig in zip(all_results_flat, fdr_significant):
+                if not is_fdr_sig:
+                    r.is_signal = False
+
+            n_signals_after = sum(1 for r in all_results_flat if r.is_signal)
+            logger.info(
+                "FDR correction applied: %d comparisons, %d signals survive "
+                "BH-FDR at alpha=0.05", n_comparisons, n_signals_after
+            )
+
         # 4. Validation (if requested)
         validation = None
         if validate:

@@ -1,5 +1,9 @@
 # TCM-HerbDrug-FAERS: Innovation Documentation
 
+## Disclaimer
+
+**This document describes the technical design of the platform. All validation results cited below are based on synthetic data with injected signals, not real FAERS data. Detection rates, sensitivity, and specificity figures apply only to the synthetic validation framework and have not been confirmed on real-world adverse event data. No clinical performance claims should be made from these results.**
+
 ## Overview
 
 This document details the technical innovations and scientific contributions of the TCM-HerbDrug-FAERS platform for herb-drug interaction (HDI) signal detection.
@@ -259,9 +263,9 @@ class MechanismGraph:
 
 | Feature | This Work | Existing Databases |
 |---------|-----------|-------------------|
-| Data Source | Real FAERS (millions of reports) | Literature review |
+| Data Source | FAERS pipeline (real data supported; current validation uses synthetic data) | Literature review |
 | Signal Metrics | 5 metrics (ROR/PRR/IC/BCPNN/MGPS) | Usually 1-2 |
-| Validation | 28 positive controls | Manual curation |
+| Validation | 28 positive controls (synthetic data only) | Manual curation |
 | Risk Levels | 3 levels with bootstrap CI | Binary |
 | Mechanism | Knowledge graph pathway | Text description |
 | Herbs Covered | 16 clinically relevant | Varies |

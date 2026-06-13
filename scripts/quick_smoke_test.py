@@ -1,6 +1,10 @@
 """Quick smoke test: generates synthetic data, runs full signal detection pipeline,
    and prints results.  No external dependencies required beyond the project itself.
 
+DISCLAIMER: This script uses synthetic data with injected signals. Results
+demonstrate that the code runs correctly but do NOT reflect real-world
+clinical performance.
+
 Usage:
     python3 scripts/quick_smoke_test.py
 """

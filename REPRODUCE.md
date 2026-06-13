@@ -15,7 +15,7 @@ pip install -e .
 
 Or install dependencies directly:
 ```bash
-pip install fastapi uvicorn scikit-learn numpy pandas pyyaml pydantic pydantic-settings torch scipy networkx
+pip install fastapi uvicorn numpy pandas pyyaml pydantic pydantic-settings httpx networkx
 ```
 
 ## Smoke Test
@@ -45,5 +45,4 @@ Access Swagger UI at: http://localhost:8029/docs
 ## Known Issues
 
 - No external real clinical data included; uses synthetic/demo data
-- torch is a heavy dependency; consider CPU-only install for API-only usage
 - No hardcoded absolute paths detected in core code

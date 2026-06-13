@@ -4,6 +4,11 @@
 This script validates the signal detection pipeline using synthetic data
 with known signal injection, before applying to real FAERS data.
 
+DISCLAIMER: All results from this script are based on synthetic data with
+injected signals. Sensitivity and specificity figures reflect performance
+on synthetic data only and should NOT be interpreted as real-world
+clinical performance. Results on real FAERS data have not yet been computed.
+
 Tests:
 1. Known signals should be detected (sensitivity)
 2. Random noise should not be detected (specificity)
@@ -210,12 +215,15 @@ def generate_report(result: dict, n_records: int) -> str:
         "=" * 70,
         "SYNTHETIC FAERS VALIDATION RESULTS",
         "=" * 70,
+        "WARNING: These results are based on SYNTHETIC data with injected",
+        "signals. They do NOT reflect real-world clinical performance.",
+        "=" * 70,
         f"Records: {n_records}",
         f"Injected signals: {result['n_injected']}",
         f"Noise pairs: {result['n_noise']}",
         "",
-        f"Sensitivity: {result['sensitivity']:.1%} ({len(result['detected'])}/{result['n_injected']})",
-        f"Specificity: {result['specificity']:.1%} ({result['n_noise'] - len(result['false_alarms'])}/{result['n_noise']})",
+        f"Sensitivity: {result['sensitivity']:.1%} ({len(result['detected'])}/{result['n_injected']}) [synthetic data only]",
+        f"Specificity: {result['specificity']:.1%} ({result['n_noise'] - len(result['false_alarms'])}/{result['n_noise']}) [synthetic data only]",
         "",
         "DETECTED SIGNALS:",
         "-" * 70,

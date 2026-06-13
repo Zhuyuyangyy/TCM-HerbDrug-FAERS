@@ -5,9 +5,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from backend.data.faers_loader import FAERSLoader
 from backend.data.herb_kg import HerbKnowledgeGraph
 from backend.data.cyp_mapper import CYPMapper
-from models.signal_detector import SignalDetector
-from analysis.risk_scoring import RiskScorer
-from analysis.evidence_chain import EvidenceChainBuilder
+from backend.models.signal_detector import SignalDetector
+from backend.analysis.risk_scoring import RiskScorer
+from backend.analysis.evidence_chain import EvidenceChainBuilder
 
 def main():
     loader = FAERSLoader()

@@ -1,4 +1,10 @@
-"""External validation against known HDI databases."""
+"""External validation against known HDI databases.
+
+NOTE: This validation module cross-references detected signals against a
+curated list of known HDI pairs. It does NOT constitute clinical validation.
+The known HDI pairs are from literature/case reports and have not been
+confirmed through real FAERS data analysis in this project.
+"""
 from typing import List, Dict, Set, Optional, Optional
 
 class ExternalValidator:
