@@ -100,7 +100,7 @@ class SignalDetector:
 
     def detect_signal(self, drug: str, event: str, a: int, b: int, c: int, d: int) -> Signal:
         metrics = self.analyzer.analyze_2x2(a, b, c, d)
-        ror, prr, ic, bcpnn = metrics
+        ror, prr, ic, bcpnn, yules_q = metrics
 
         # Traditional combined decision
         is_signal = ror.is_significant and prr.is_significant

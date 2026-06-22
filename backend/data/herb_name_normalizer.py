@@ -111,7 +111,7 @@ HERB_PROFILES: Dict[str, HerbProfile] = {
             r"\bMA HUANG\b",
             r"\bEPHEDRINE\b",
             r"EPHEDRA SINICA",
-            r"\bEPHEDRINE\b",
+            r"\bPSEUDOEPHEDRINE\b",
         ],
         description="Ephedra herb; sympathomimetic, banned in US supplements",
         known_interactions=["MAO inhibitors", "theophylline", "caffeine",

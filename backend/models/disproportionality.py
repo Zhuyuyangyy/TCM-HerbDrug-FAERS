@@ -25,7 +25,8 @@ class DisproportionalityAnalyzer:
             # Use Haldane-Anscombe correction: add 0.5 to all cells
             a_c, b_c, c_c, d_c = a + 0.5, b + 0.5, c + 0.5, d + 0.5
             ror = (a_c * d_c) / (b_c * c_c)
-            if a < self.min_cases:
+            # Always guard against division by zero in CI on the original cells.
+            if a < self.min_cases or a == 0:
                 return DisproportionalityResult("ROR", round(ror, 4), 0, 999, False, a, 0)
         else:
             ror = (a * d) / (b * c)
@@ -45,7 +46,8 @@ class DisproportionalityAnalyzer:
             # Haldane-Anscombe correction
             a_c, b_c, c_c, d_c = a + 0.5, b + 0.5, c + 0.5, d + 0.5
             prr = (a_c / (a_c + b_c)) / (c_c / (c_c + d_c))
-            if a < self.min_cases:
+            # PRR's CI is undefined when a == 0, so always short-circuit.
+            if a < self.min_cases or a == 0:
                 return DisproportionalityResult("PRR", round(prr, 4), 0, 999, False, a, 0)
         else:
             prr = (a / (a + b)) / (c / (c + d))
@@ -127,13 +129,53 @@ class DisproportionalityAnalyzer:
         return DisproportionalityResult("BCPNN", round(e_ic, 4), round(ci_lower, 4),
                                         round(ci_upper, 4), significant, a, round(n_exp, 4))
 
+    def compute_yules_q(self, a: int, b: int, c: int, d: int) -> DisproportionalityResult:
+        """Yule's Q association coefficient for a 2x2 contingency table.
+
+        Yule's Q = (ad - bc) / (ad + bc)
+
+        Properties:
+          * Range: -1 (perfect negative association) to +1 (perfect positive).
+          * Sign-invariant to row/column swapping (unlike ROR/PRR).
+          * Complements ROR: when ROR = 1, Q = 0; when ROR = inf, Q = 1.
+          * Useful for ranking drug-event pairs by effect-size strength in
+            a comparable way across different event vocabularies.
+
+        For the standard error we use the asymptotic formula:
+            SE(Q) ~= (1 - Q^2) / 2 * sqrt(1/a + 1/b + 1/c + 1/d)
+        which gives an approximate 95% CI on the Q scale.
+        Significant if CI lower > 0 and a >= min_cases.
+        """
+        if a == 0 or b == 0 or c == 0 or d == 0:
+            # Haldane-Anscombe correction to keep the denominator non-zero.
+            a_c, b_c, c_c, d_c = a + 0.5, b + 0.5, c + 0.5, d + 0.5
+            num = a_c * d_c - b_c * c_c
+            den = a_c * d_c + b_c * c_c
+            q = num / den if den != 0 else 0.0
+            if a < self.min_cases or a == 0:
+                return DisproportionalityResult("YULES_Q", round(q, 4), -1.0, 1.0, False, a, 0)
+        else:
+            num = a * d - b * c
+            den = a * d + b * c
+            q = num / den if den != 0 else 0.0
+
+        # Asymptotic SE on the Q scale (Bishop et al., 1975)
+        se_sum = 1.0 / a + 1.0 / b + 1.0 / c + 1.0 / d
+        se = ((1.0 - q * q) / 2.0) * math.sqrt(se_sum)
+        ci_lower = max(-1.0, q - 1.96 * se)
+        ci_upper = min(1.0, q + 1.96 * se)
+        significant = ci_lower > 0.0 and a >= self.min_cases
+        return DisproportionalityResult("YULES_Q", round(q, 4), round(ci_lower, 4),
+                                        round(ci_upper, 4), significant, a, 0)
+
     def analyze_2x2(self, a: int, b: int, c: int, d: int) -> list:
-        """Run all four metrics on a 2x2 table."""
+        """Run all five metrics on a 2x2 table."""
         n = a + b + c + d
         return [self.compute_ror(a, b, c, d),
                 self.compute_prr(a, b, c, d),
                 self.compute_ic(a, b, c, d, n),
-                self.compute_bcpnn(a, b, c, d)]
+                self.compute_bcpnn(a, b, c, d),
+                self.compute_yules_q(a, b, c, d)]
 
     @staticmethod
     def p_value_from_ror(ror_value: float, ci_lower: float, ci_upper: float) -> float:

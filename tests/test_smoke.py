@@ -101,6 +101,46 @@ class TestDisproportionality:
         assert r.value > 0  # Should not crash or return 0
         assert not r.is_significant  # a=0 < min_cases
 
+    def test_ror_zero_cells_no_min_cases(self):
+        """ROR must not divide by zero even when min_cases=0."""
+        from backend.models.disproportionality import DisproportionalityAnalyzer
+        a = DisproportionalityAnalyzer(min_cases=0)
+        r = a.compute_ror(0, 100, 5, 895)  # previously raised ZeroDivisionError
+        assert r.value > 0
+        assert r.ci_lower == 0 and r.ci_upper == 999
+        assert r.is_significant is False
+
+    def test_prr_zero_cells_no_min_cases(self):
+        """PRR must not raise even when min_cases=0 and a=0."""
+        from backend.models.disproportionality import DisproportionalityAnalyzer
+        a = DisproportionalityAnalyzer(min_cases=0)
+        r = a.compute_prr(0, 100, 5, 895)  # previously raised OverflowError
+        assert r.value > 0
+        assert r.ci_lower == 0 and r.ci_upper == 999
+        assert r.is_significant is False
+
+    def test_yules_q_basic(self, analyzer):
+        """Yule's Q should be positive for an associated pair and bounded in [-1, 1]."""
+        r = analyzer.compute_yules_q(50, 50, 5, 895)
+        assert r.metric == "YULES_Q"
+        assert -1.0 <= r.value <= 1.0
+        assert r.value > 0
+        assert r.is_significant is True
+        assert r.ci_lower <= r.value <= r.ci_upper
+
+    def test_yules_q_no_association(self, analyzer):
+        """Yule's Q should be ~0 when odds are equal (a*d == b*c)."""
+        # 10/90 == 100/900 -> Q should be 0
+        r = analyzer.compute_yules_q(10, 90, 100, 900)
+        assert abs(r.value) < 1e-6
+        assert r.is_significant is False
+
+    def test_yules_q_zero_cells(self, analyzer):
+        """Yule's Q should handle zero cells without crashing."""
+        r = analyzer.compute_yules_q(0, 100, 5, 895)
+        assert -1.0 <= r.value <= 1.0
+        assert r.is_significant is False
+
     def test_prr_basic(self, analyzer):
         """PRR should detect proportional reporting difference."""
         r = analyzer.compute_prr(50, 50, 5, 895)
@@ -140,14 +180,15 @@ class TestDisproportionality:
         assert r.is_significant is False
 
     def test_analyze_2x2_all_metrics(self, analyzer):
-        """analyze_2x2 should return all four metrics."""
+        """analyze_2x2 should return all five metrics."""
         results = analyzer.analyze_2x2(30, 70, 10, 890)
-        assert len(results) == 4
+        assert len(results) == 5
         metric_names = [r.metric for r in results]
         assert "ROR" in metric_names
         assert "PRR" in metric_names
         assert "IC" in metric_names
         assert "BCPNN" in metric_names
+        assert "YULES_Q" in metric_names
 
     def test_confidence_intervals(self, analyzer):
         """CI lower should be <= value <= CI upper."""

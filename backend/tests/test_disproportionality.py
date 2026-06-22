@@ -41,8 +41,9 @@ def test_min_cases():
 def test_analyze_2x2():
     a = DisproportionalityAnalyzer()
     results = a.analyze_2x2(20, 80, 10, 890)
-    assert len(results) == 4
+    assert len(results) == 5
     assert results[0].metric == "ROR"
     assert results[1].metric == "PRR"
     assert results[2].metric == "IC"
     assert results[3].metric == "BCPNN"
+    assert results[4].metric == "YULES_Q"

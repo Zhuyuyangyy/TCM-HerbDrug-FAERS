@@ -166,7 +166,7 @@ class FAERSAnalysisPipeline:
                     contingency["a"], contingency["b"],
                     contingency["c"], contingency["d"],
                 )
-                ror, prr, ic, bcpnn = metrics
+                ror, prr, ic, bcpnn, yules_q = metrics
 
                 # MGPS-inspired score
                 mgps = self.signal_detector._compute_mgps(

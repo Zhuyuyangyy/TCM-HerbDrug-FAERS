@@ -5,7 +5,7 @@ curated list of known HDI pairs. It does NOT constitute clinical validation.
 The known HDI pairs are from literature/case reports and have not been
 confirmed through real FAERS data analysis in this project.
 """
-from typing import List, Dict, Set, Optional, Optional
+from typing import List, Dict, Optional
 
 class ExternalValidator:
     """外部验证器 — 交叉验证FAERS信号与已知HDI数据库"""
